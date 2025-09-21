@@ -1,5 +1,6 @@
 <?php
-$host = 'db'; // Nama service database di docker-compose.yml
+// Database configuration for Ubuntu deployment
+$host = 'localhost'; // Changed from 'db' to 'localhost' for native Ubuntu setup
 $db   = 'task_manager';
 $user = 'user';
 $pass = 'password';
@@ -14,7 +15,11 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
+    // Test the connection
+    $pdo->query('SELECT 1');
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    // More detailed error handling for debugging
+    error_log("Database connection failed: " . $e->getMessage());
+    die("Database connection failed. Please check your database configuration.<br>Error: " . $e->getMessage());
 }
 ?>
